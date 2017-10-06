@@ -1,0 +1,44 @@
+import numpy as np
+import scipy as sci
+import scipy.ndimage as ndi
+import math, time
+from scipy.ndimage import *
+from scipy.misc.pilutil import imshow
+
+def histogram(I):
+    Ones = np.ones_like(I)
+    result = ndi.sum(Ones, I, index = range(256))
+    return result.astype(int)
+
+EPS = 1e-8
+
+def Entropy(hist, hist_sum):
+    '''
+    256 X Speed than Calculate One By One
+    '''
+    hist_log = hist * np.log(hist + EPS)
+    hist_log_sum = np.cumsum(hist_log)
+    
+    H_A = - (hist_log_sum - hist_sum * np.log(hist_sum + EPS)) / (hist_sum + EPS)
+    #print H_A
+    
+    hist_total = hist.sum()
+    hist_log_total = hist_log.sum()
+    
+    hist_sum_ = hist_total - hist_sum
+    hist_log_sum_ = hist_log_total - hist_log_sum
+    
+    H_B = - (hist_log_sum_ - hist_sum_ * np.log(hist_sum_ + EPS)) / (hist_sum_ + EPS)
+    #print HB
+    H = H_A + H_B
+    return H
+
+st = time.time()
+I = imread('Image1.jpg')
+hist = histogram(I)
+hist_sum = np.cumsum(hist)
+H = Entropy(hist, hist_sum)
+print np.argmax(H)
+I_Thresh = (I>= np.argmax(H))
+print time.time() - st
+imshow(I_Thresh)
