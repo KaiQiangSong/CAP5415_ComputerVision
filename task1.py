@@ -4,7 +4,6 @@ import scipy.ndimage as ndi
 import math
 from scipy.ndimage import *
 from scipy.misc.pilutil import imshow
-from copy import deepcopy
 
 
 def Gaussian(x, sigma = 1):
