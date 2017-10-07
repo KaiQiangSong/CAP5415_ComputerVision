@@ -15,6 +15,19 @@ EPS = 1e-8
 def Entropy(hist, hist_sum):
     '''
     256 X Speed than Calculate One By One
+    
+    
+    H_A_i = -1/P * (Sigma (P_j Log P_j) - Sigma (P_j) Log P) (j = 0..i)
+    P = Sigma P_j (j = 0..i)
+    
+    Let S_i = Sigma(P_j) (j from 0 to i)
+    Let Q_i = Sigma(P_j Log P_j) (j from 0 to i)
+    
+    H_A_i = - (Q_i - S_i log S_i) / S_i
+    
+    Similar to H_B_i
+    
+    Since We only need the prefix summation of a list of values, We can solve it in O(Range of Colors)
     '''
     hist_log = hist * np.log(hist + EPS)
     hist_log_sum = np.cumsum(hist_log)
