@@ -46,12 +46,13 @@ def Entropy(hist, hist_sum):
     H = H_A + H_B
     return H
 
-st = time.time()
-I = imread('Image1.jpg')
-hist = histogram(I)
-hist_sum = np.cumsum(hist)
-H = Entropy(hist, hist_sum)
-print np.argmax(H)
-I_Thresh = (I>= np.argmax(H))
-print time.time() - st
-imshow(I_Thresh)
+if __name__ == '__main__':
+    st = time.time()
+    I = imread('Image1.jpg')
+    hist = histogram(I)
+    hist_sum = np.cumsum(hist)
+    H = Entropy(hist, hist_sum)
+    print np.argmax(H)
+    I_Thresh = (I>= np.argmax(H))
+    print time.time() - st
+    imshow(I_Thresh)

@@ -198,28 +198,29 @@ def Candy(I, sigma = 1):
     #Pack and Return All the Result Graphs For Demo
     return [I_x, I_y, I_x_2, I_y_2], [I, M, M_new, M_threshold]
 
-# Input the Image I
-I = imread('Image3.jpg')
+if __name__ == '__main__':
+    # Input the Image I
+    I = imread('Image3.jpg')
 
-# Get the Graphs
-IG, Candies = Candy(I, 0.1)
+    # Get the Graphs
+    IG, Candies = Candy(I, 0.1)
 
-# Do concatenation to demo
-outputImage = np.concatenate([np.concatenate([Normalize(img) for img in IG], axis = 1),
-                              np.concatenate([Normalize(img) for img in Candies], axis = 1)],
-                             axis = 0)
+    # Do concatenation to demo
+    outputImage = np.concatenate([np.concatenate([Normalize(img) for img in IG], axis = 1),
+                                  np.concatenate([Normalize(img) for img in Candies], axis = 1)],
+                                 axis = 0)
 
-# Demo
-imshow(outputImage)
+    # Demo
+    imshow(outputImage)
 
 
-# It seems the less sigma value is the better performance we get
+    # It seems the less sigma value is the better performance we get
 
-sigmas = [0.1, 1 ,10, 100]
-outputs = []
-for sig in sigmas:
-    _, Candies = Candy(I, sig)
-    outputs.append(Candies[3])
+    sigmas = [0.1, 1 ,10, 100]
+    outputs = []
+    for sig in sigmas:
+        _, Candies = Candy(I, sig)
+        outputs.append(Candies[3])
 
-outputImages = np.concatenate(outputs, axis = 1)
-imshow(outputImages)
+    outputImages = np.concatenate(outputs, axis = 1)
+    imshow(outputImages)
