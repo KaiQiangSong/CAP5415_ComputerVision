@@ -71,7 +71,10 @@ def Cornor(M):
     return Cornor
 
 if __name__ == '__main__':
-    I = imread('Image1.jpg')
+    I = imread('input3.png')
+    if I.ndim == 3:
+        I = I[:,:,0]
+    imshow(I)
 
 
     # Task 3.1
@@ -88,16 +91,19 @@ if __name__ == '__main__':
     imshow(C1)
 
     # Task 3.2
-    filter = dualG(sigma = 0.1)
+    filter = dualG(sigma = 1)
     g2I = np.reshape(GaussianHessian(I, filter, 2), I.shape + (2, 2))
     
+    st = time.time()
     score_1 = la.det(g2I) - 0.04 * np.trace(g2I, axis1 = g2I.ndim-2, axis2 = g2I.ndim-1)
     C2 = Cornor(score_1)
+    print time.time() - st
     imshow(C2)
     
     # Task 3.3
+    st = time.time()
     eigvals_ = la.eigvals(g2I)
-    print eigvals_.shape
     score_2 = np.prod(eigvals_, axis = 2) - 0.04 * np.sum(eigvals_, axis = 2)
     C3 = Cornor(score_2)
+    print time.time() - st
     imshow(C3)
