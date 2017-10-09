@@ -81,7 +81,8 @@ def SUSAN_Corner(I, mask):
 
 def Median(I):
     highI = duplicate2D_2D(I, mask)
-    return np.median(highI, axis = 2)
+    M = np.median(highI, axis = 2)
+    return M
     
 if __name__ == '__main__':
     
