@@ -42,11 +42,20 @@ if __name__ == '__main__':
     imshow(I_HE)
     
     # task 5.2
+    '''
+    The result seems to much more clear than original Image,
+    since it stretches the sensitive pixels to a larger brightness range
+    and block all the non-sensitive pixels 
+    '''
     
     I_Clip = Clipping(I)
     imshow(I_Clip)
     
     #task 5.3
+    '''
+    Much brighter than before.
+    For the reason above, there's no much difference using different c.
+    '''
     for c in [1, 10, 100, 1000]:
         I_RC = Range_Compression(I, c)
         imshow(I_RC)

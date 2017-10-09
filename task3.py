@@ -71,7 +71,7 @@ def Corner(M):
     return Corner
 
 if __name__ == '__main__':
-    I = imread('input3.png')
+    I = imread('input1.png')
     if I.ndim == 3:
         I = I[:,:,0]
     imshow(I)
@@ -93,6 +93,10 @@ if __name__ == '__main__':
     imshow(C1)
 
     # Task 3.2
+    '''
+    when alpha goes up more and more corners are disappeared.
+    On the contract, when alpha goes down, the result shows more details. (Some are noise in the Image) 
+    '''
     filter = dualG(sigma = 1)
     g2I = np.reshape(GaussianHessian(I, filter, 2), I.shape + (2, 2))
     
@@ -109,3 +113,5 @@ if __name__ == '__main__':
     C3 = Corner(score_2)
     print time.time() - st
     imshow(C3)
+    
+    

@@ -96,6 +96,9 @@ if __name__ == '__main__':
     
     
     #task 4.2
+    '''
+    SUSAN Corner Detection method works badly on noise
+    '''
     I = imread('susan_input2.png')
     if I.ndim == 3:
         I = I[:,:,0]
@@ -104,6 +107,10 @@ if __name__ == '__main__':
     imshow(Corner)
     
     #task 4.3
+    '''
+    Median Filter can work well on smoothing the Image, but lead some noise on the edges,
+    which lead the corner detector becomes an edge detector.
+    '''
     I = Median(I)
     imshow(I)
     
