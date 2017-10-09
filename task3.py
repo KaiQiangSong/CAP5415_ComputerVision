@@ -58,8 +58,8 @@ def GaussianHessian(I, filter = dualG(), n = 1):
         
     return gnI
 
-def Cornor(M):
-    hist = histogram(np.floor(Normalize(M)))
+def Corner(M):
+    hist = histogram(np.round(Normalize(M)))
     hist_sum = np.cumsum(hist)
     hist_total = hist.sum()
 
@@ -67,8 +67,8 @@ def Cornor(M):
     T = np.min(np.argwhere(Thresholds > 0))
 
 
-    Cornor = (Normalize(M) >= T).astype(int)
-    return Cornor
+    Corner = (Normalize(M) >= T).astype(int)
+    return Corner
 
 if __name__ == '__main__':
     I = imread('input3.png')
@@ -78,6 +78,7 @@ if __name__ == '__main__':
 
 
     # Task 3.1
+    st = time.time()
     dI = derivative(I)
     d2I = derivative(dI)
 
@@ -87,7 +88,8 @@ if __name__ == '__main__':
     min_eigvals = eigvals.min(axis = 2)
     
     
-    C1 =  Cornor(min_eigvals)
+    C1 =  Corner(min_eigvals)
+    print time.time() - st
     imshow(C1)
 
     # Task 3.2
@@ -96,7 +98,7 @@ if __name__ == '__main__':
     
     st = time.time()
     score_1 = la.det(g2I) - 0.04 * np.trace(g2I, axis1 = g2I.ndim-2, axis2 = g2I.ndim-1)
-    C2 = Cornor(score_1)
+    C2 = Corner(score_1)
     print time.time() - st
     imshow(C2)
     
@@ -104,6 +106,6 @@ if __name__ == '__main__':
     st = time.time()
     eigvals_ = la.eigvals(g2I)
     score_2 = np.prod(eigvals_, axis = 2) - 0.04 * np.sum(eigvals_, axis = 2)
-    C3 = Cornor(score_2)
+    C3 = Corner(score_2)
     print time.time() - st
     imshow(C3)
