@@ -8,15 +8,16 @@ from scipy.misc.pilutil import imshow
 
 from task1 import Normalize, dualG, Conv2D_1D
 from task2 import histogram
+from task4 import duplicate2D_2D
+
+def dFilter():
+    return np.asarray([-1, 0, 1], dtype = np.float32)
 
 def derivative_x(I):
-    shp = I.shape
-    I_padding = np.concatenate([I, np.zeros((1, shp[1]), dtype = np.float32)], axis = 0)
-    I_x = I_padding[1:] - I_padding[:-1]
-    return I_x
+    return np.asarray(Conv2D_1D(I, dFilter()))
 
 def derivative_y(I):
-    return np.transpose(derivative_x(np.transpose(I)))
+    return np.asarray(np.transpose(Conv2D_1D(np.transpose(I), dFilter())))
 
 def derivative(I):
     if type(I) == list:
@@ -32,46 +33,56 @@ def derivative2Hessian_(M):
 def derivative2Hessian(M):
     return np.transpose(derivative2Hessian_(M), (2, 3, 1, 0))
 
-def Gaussian_x(I ,filter):
-    return np.transpose(Conv2D_1D(np.transpose(I), filter))
+def Gaussian2D(x, y, sigma = 1):
+    '''
+    2D Gaussian Function
+    '''
+    return 1.0 / (2.0 * math.pi * sigma * sigma) * np.exp(-1.0 / (2.0 * sigma * sigma) * (x * x + y * y))
 
-def Gaussian_y(I, filter):
-    return Conv2D_1D(I, filter)
+def GuassianFilter2D(size = 5, sigma = 1):
+    '''
+    Build a 2D Gaussian Filter use 2D Gaussian Function
+    '''
+    dx = np.tile(np.asarray(range(-(size/2), size/2+1), dtype = np.float32), (size,1))
+    dy = np.transpose(dx)
+    return Gaussian2D(dx, dy, sigma)
 
-def Gaussian(I, filter, n = 1):
-    G_x = Gaussian_x(I,filter)
-    G_y = Gaussian_y(I,filter)
-    return np.transpose(np.stack([np.asarray(G_x), np.asarray(G_y)]), (1,2,0))
+def Conv2D_2D(I, filter):
+    '''
+    Conv on  2D Image with a 2D kernel
+    '''
+    mask = np.ones_like(filter, dtype = np.int)
+    highI = duplicate2D_2D(I, mask)
+    ConvI = np.dot(highI, np.reshape(filter, (filter.shape[0] * filter.shape[1], 1)))
+    return np.reshape(ConvI, I.shape)
 
-def GaussianHessian(I, filter = dualG(), n = 1):
-    gI = Gaussian(I, filter)
-    gI_ = np.reshape(gI, gI.shape[:-1] + (1, gI.shape[-1]))
-    gI_ = np.concatenate([gI_, np.zeros_like(gI_)], axis = gI_.ndim - 2)
-    gnI = gI
-    for i in range(1,n):
-        gnI = np.reshape(gnI, gnI.shape + (1,))
-        gnI = np.concatenate([gnI, np.zeros_like(gnI)], axis = gnI.ndim - 1)
-        
-        ndim = gnI.ndim
-        gnI = np.matmul(gnI, gI_)
-        gnI = np.reshape(gnI, gnI.shape[:-2] + (gnI.shape[-2] * gnI.shape[-1], ))
-        
-    return gnI
+def GaussianHessian(I, filter):
+    I_x, I_y = derivative(I)
+    A = Conv2D_2D(I_x * I_x, filter)
+    B = Conv2D_2D(I_y * I_y, filter)
+    C = Conv2D_2D(I_x * I_y, filter)
+    
+    H = np.stack([np.stack([A, C]), np.stack([C, B])])
+    H = np.transpose(H, (2, 3, 0, 1))
+    return H
 
 def Corner(M):
+    '''
+    A Threshold Method to dectect the Corner
+    '''
     hist = histogram(np.round(Normalize(M)))
     hist_sum = np.cumsum(hist)
     hist_total = hist.sum()
 
-    Thresholds = (hist_sum >= (0.98 * hist_total)).astype(int)
+    Thresholds = (hist_sum >= (0.998 * hist_total)).astype(int)
     T = np.min(np.argwhere(Thresholds > 0))
-
+    print 'Thresholds =', T
 
     Corner = (Normalize(M) >= T).astype(int)
     return Corner
 
 if __name__ == '__main__':
-    I = imread('input1.png')
+    I = imread('input3.png')
     if I.ndim == 3:
         I = I[:,:,0]
     imshow(I)
@@ -94,11 +105,10 @@ if __name__ == '__main__':
 
     # Task 3.2
     '''
-    when alpha goes up more and more corners are disappeared.
-    On the contract, when alpha goes down, the result shows more details. (Some are noise in the Image) 
+    # It seems that there's no much differences when I fine-tune my alpha value
     '''
-    filter = dualG(sigma = 1)
-    g2I = np.reshape(GaussianHessian(I, filter, 2), I.shape + (2, 2))
+    filter = GuassianFilter2D()
+    g2I = GaussianHessian(I, filter)
     
     st = time.time()
     score_1 = la.det(g2I) - 0.04 * np.trace(g2I, axis1 = g2I.ndim-2, axis2 = g2I.ndim-1)
@@ -107,11 +117,14 @@ if __name__ == '__main__':
     imshow(C2)
     
     # Task 3.3
+    '''
+    Basicly it's theoretically the same.
+    But the 1st (Task 3.2) method runs much quicker than the 2nd (Task 3.3) method.
+    It takes 0.106s for 1st method, and 0.532s for 2nd method 
+    '''
     st = time.time()
     eigvals_ = la.eigvals(g2I)
     score_2 = np.prod(eigvals_, axis = 2) - 0.04 * np.sum(eigvals_, axis = 2)
     C3 = Corner(score_2)
     print time.time() - st
     imshow(C3)
-    
-    

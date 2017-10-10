@@ -215,6 +215,7 @@ if __name__ == '__main__':
 
 
     # It seems the less sigma value is the better performance we get
+    # less sigma value can obtain more details
 
     sigmas = [0.1, 1 ,10, 100]
     outputs = []

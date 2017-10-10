@@ -32,7 +32,9 @@ dy = np.reshape(dy, (dy.shape[0], 1))
 
 
 def duplicate2D_2D(I, mask, padding = True):
-    
+    '''
+    Prepare a 3D-Tensor on Image I for Conv or other operation with a 2D Mask
+    '''
     
     if padding:
         pad_x = mask.shape[0]/2
@@ -60,21 +62,28 @@ def USAN(I, mask, t = 255, ratio = 0.5):
     N = distance.sum(axis = 2)
     g = ratio * N.max()
     
-    
     R = (N <= g).astype(int) * (g - N)
     
     return N, R, distance
 
 def SUSAN_Corner(I, mask):
+    '''
+    Corner Detection, which Ratio is 0.5 (Edge is 0.75)
+    Apply Non-max Suppression (a trick version)
+    '''
     N, R, distance = USAN(I, mask, ratio = 0.5)
     
+    # Calculate the center point of gravity 
     distance_x = np.reshape(np.dot(distance, dx), distance.shape[:-1])
     distance_y = np.reshape(np.dot(distance, dy), distance.shape[:-1])
     
     center_x = distance_x / (N + eps)
     center_y = distance_y / (N + eps)
     
+    # Calculate the distance between mask center and gravity center
     away = np.sqrt(center_x * center_x + center_y * center_y)
+    
+    # Non-max Suppression
     Corner = (away > 3).astype(int)
     
     return Corner
