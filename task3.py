@@ -11,26 +11,44 @@ from task2 import histogram
 from task4 import duplicate2D_2D
 
 def dFilter():
+    '''
+    derivative Filter
+    '''
     return np.asarray([-1, 0, 1], dtype = np.float32)
 
 def derivative_x(I):
+    '''
+    apply derivative Filter on x axis
+    '''
     return np.asarray(Conv2D_1D(I, dFilter()))
 
 def derivative_y(I):
+    '''
+    apply derivative Filter on y axis
+    '''
     return np.asarray(np.transpose(Conv2D_1D(np.transpose(I), dFilter())))
 
 def derivative(I):
+    '''
+    get next order derivatives 
+    '''
     if type(I) == list:
         return [derivative(item) for item in I]
     return [derivative_x(I), derivative_y(I)]
 
 def derivative2Hessian_(M):
+    '''
+    build a Hessian Matrix 
+    '''
     if type(M[0]) != list:
         return np.stack(M)
     MM = [derivative2Hessian_(item) for item in M]
     return np.stack(MM)
 
 def derivative2Hessian(M):
+    '''
+    build a Hessian Matrix and transpose to a readable format
+    '''
     return np.transpose(derivative2Hessian_(M), (2, 3, 1, 0))
 
 def Gaussian2D(x, y, sigma = 1):
@@ -57,6 +75,9 @@ def Conv2D_2D(I, filter):
     return np.reshape(ConvI, I.shape)
 
 def GaussianHessian(I, filter):
+    '''
+    Build a Hessian which apply Gaussian Smothing
+    '''
     I_x, I_y = derivative(I)
     A = Conv2D_2D(I_x * I_x, filter)
     B = Conv2D_2D(I_y * I_y, filter)

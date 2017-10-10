@@ -55,6 +55,9 @@ def duplicate2D_2D(I, mask, padding = True):
     return highI
 
 def USAN(I, mask, t = 255, ratio = 0.5):
+    '''
+    Get the USAN
+    '''
     
     highI = duplicate2D_2D(I, mask)
     distance = np.power((highI - I[:,:,None]) / t, 6)
@@ -88,7 +91,10 @@ def SUSAN_Corner(I, mask):
     
     return Corner
 
-def Median(I):
+def Median(I, mask = mask):
+    '''
+    Median Filter
+    '''
     highI = duplicate2D_2D(I, mask)
     M = np.median(highI, axis = 2)
     return M
