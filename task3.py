@@ -8,7 +8,30 @@ from scipy.misc.pilutil import imshow
 
 from task1 import Normalize, dualG, Conv2D_1D
 from task2 import histogram
-from task4 import duplicate2D_2D
+
+
+def duplicate2D_2D(I, mask, padding = True):
+    '''
+    Prepare a 3D-Tensor on Image I for Conv or other operation with a 2D Mask
+    '''
+    
+    if padding:
+        pad_x = mask.shape[0]/2
+        pad_y = mask.shape[1]/2
+        I_padding = np.zeros((I.shape[0] + pad_x * 2, I.shape[1] + pad_y * 2), dtype = np.float32)
+        I_padding[pad_x:I.shape[0]+pad_x, pad_y:I.shape[1]+pad_y] = I
+    else:
+        I_padding = I
+    
+    
+    highI = np.empty(I.shape+(0,), dtype = np.float32)
+    
+    for i in range(mask.shape[0]):
+        for j in range(mask.shape[1]):
+            if mask[i,j] > 0:
+                highI = np.append(highI, np.reshape(I_padding[i:i+I.shape[0], j:j+I.shape[1]], I.shape+(1,)), axis = 2)
+                
+    return highI
 
 def dFilter():
     '''
@@ -87,7 +110,7 @@ def GaussianHessian(I, filter):
     H = np.transpose(H, (2, 3, 0, 1))
     return H
 
-def Corner(M):
+def Corner_(M, ratio = 0.998):
     '''
     A Threshold Method to dectect the Corner
     '''
@@ -95,7 +118,7 @@ def Corner(M):
     hist_sum = np.cumsum(hist)
     hist_total = hist.sum()
 
-    Thresholds = (hist_sum >= (0.998 * hist_total)).astype(int)
+    Thresholds = (hist_sum >= (ratio * hist_total)).astype(int)
     T = np.min(np.argwhere(Thresholds > 0))
     print 'Thresholds =', T
 
@@ -120,7 +143,7 @@ if __name__ == '__main__':
     min_eigvals = eigvals.min(axis = 2)
     
     
-    C1 =  Corner(min_eigvals)
+    C1 =  Corner_(min_eigvals)
     print time.time() - st
     imshow(C1)
 
@@ -133,7 +156,7 @@ if __name__ == '__main__':
     
     st = time.time()
     score_1 = la.det(g2I) - 0.04 * np.trace(g2I, axis1 = g2I.ndim-2, axis2 = g2I.ndim-1)
-    C2 = Corner(score_1)
+    C2 = Corner_(score_1)
     print time.time() - st
     imshow(C2)
     
@@ -146,6 +169,6 @@ if __name__ == '__main__':
     st = time.time()
     eigvals_ = la.eigvals(g2I)
     score_2 = np.prod(eigvals_, axis = 2) - 0.04 * np.sum(eigvals_, axis = 2)
-    C3 = Corner(score_2)
+    C3 = Corner_(score_2)
     print time.time() - st
     imshow(C3)

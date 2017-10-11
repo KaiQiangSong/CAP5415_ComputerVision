@@ -7,6 +7,8 @@ import math, time
 from scipy.ndimage import *
 from scipy.misc.pilutil import imshow
 from task1 import Normalize
+from task2 import histogram
+from task3 import duplicate2D_2D, Corner_
 
 eps = 1e-8
 
@@ -29,38 +31,13 @@ dy = np.asarray([fy.flatten().tolist()[i] for i in range(mask_flat.shape[0]) if 
 dx = np.reshape(dx, (dx.shape[0], 1))
 dy = np.reshape(dy, (dy.shape[0], 1))
 
-
-
-def duplicate2D_2D(I, mask, padding = True):
-    '''
-    Prepare a 3D-Tensor on Image I for Conv or other operation with a 2D Mask
-    '''
-    
-    if padding:
-        pad_x = mask.shape[0]/2
-        pad_y = mask.shape[1]/2
-        I_padding = np.zeros((I.shape[0] + pad_x * 2, I.shape[1] + pad_y * 2), dtype = np.float32)
-        I_padding[pad_x:I.shape[0]+pad_x, pad_y:I.shape[1]+pad_y] = I
-    else:
-        I_padding = I
-    
-    
-    highI = np.empty(I.shape+(0,), dtype = np.float32)
-    
-    for i in range(mask.shape[0]):
-        for j in range(mask.shape[1]):
-            if mask[i,j] > 0:
-                highI = np.append(highI, np.reshape(I_padding[i:i+I.shape[0], j:j+I.shape[1]], I.shape+(1,)), axis = 2)
-                
-    return highI
-
-def USAN(I, mask, t = 255, ratio = 0.5):
+def USAN(I, mask, t = 32, ratio = 0.5):
     '''
     Get the USAN
     '''
     
     highI = duplicate2D_2D(I, mask)
-    distance = np.power((highI - I[:,:,None]) / t, 6)
+    distance = np.exp(-np.power((highI - I[:,:,None]) / t, 6))
     
     N = distance.sum(axis = 2)
     g = ratio * N.max()
@@ -87,7 +64,8 @@ def SUSAN_Corner(I, mask):
     away = np.sqrt(center_x * center_x + center_y * center_y)
     
     # Non-max Suppression
-    Corner = (away > 3).astype(int)
+    #Corner = (away > 0.05).astype(int)
+    Corner = Corner_(away, 0.98)
     
     return Corner
 
@@ -122,10 +100,12 @@ if __name__ == '__main__':
     imshow(Corner)
     
     #task 4.3
+
     '''
     Median Filter can work well on smoothing the Image, but lead some noise on the edges,
     which lead the corner detector becomes an edge detector.
     '''
+
     I = Median(I)
     imshow(I)
     
