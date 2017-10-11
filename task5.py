@@ -21,8 +21,10 @@ def Histogram_Equalization(I):
 
 def Clipping(I, a = 50, b = 150, beta = 2):
     
-    mask = ((a <= I) & (I < b)).astype(int)
-    return mask * I * beta
+    mask_a = ((a <= I) & (I < b)).astype(int)
+    mask_b = (I >= b).astype(int)
+    
+    return mask_a * I * beta + mask_b * np.ones_like(I) * beta * (b - a)
 
 def Range_Compression(I, c):
     map = c * np.log10(1 + np.asarray(range(256), dtype = np.float32))
