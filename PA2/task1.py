@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 import numpy.linalg as la
@@ -120,48 +121,38 @@ def OpticalFlow(img1, img2):
     for p in Corners.tolist():
         y, x = p
         p0 = (x, y)
-        p1 = (x + u[x, y], y + v[x, y])
-        result.append((p0,p1))
+        dp = (u[x, y], v[x, y])
+        result.append((p0,dp))
     return result
 
+def Arrow(ax, line):
+    p0 = line[0]
+    dp = line[1]
+    print line
+    ax.arrow(p0[0], p0[1], dp[0], dp[1], head_width=0.05, head_length=0.1, fc='k', ec='k')
+    return ax
 
+def Question1(prefix):
+    f1Name = prefix+'1.png'
+    f2Name = prefix+'2.png'
+    img1 = cv2.imread(f1Name)
+    img2 = cv2.imread(f2Name)
+    img = img1
+    img1 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
+    img2 = cv2.cvtColor(img2, cv2.COLOR_RGB2GRAY)
+    
+    result = OpticalFlow(img1, img2)
+    ax = plt.axes()
+    ax.set_xlim([img.shape[0], 0])
+    ax.set_ylim([0, img.shape[1]])
+    
+    for line in result:
+        Arrow(ax, line)
+    plt.show()
+    
     
 if __name__ == '__main__':
-    img1 = cv2.imread('basketball1.png')
-    img_ = img1
-    img1 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
-    #showImg(img1)
+    Question1('basketball')
+    Question1('grove')
     
-    img2 = cv2.imread('basketball2.png')
-    img2 = cv2.cvtColor(img2, cv2.COLOR_RGB2GRAY)
-    #showImg(img2)
-    
-    
-    #showImg(f_x)
-    #showImg(f_y)
-    #showImg(f_t)
-    
-    
-    print u.shape
-    print v.shape
-    
-    
-    #print Corners
-    
-    print Corners.shape
-    
-    for p in Corners.tolist():
-        y, x = p
-        p0 = (x, y)
-        p1 = (int(x + u[x, y]), int(y + v[x, y]))
-        cv2.line(img_, p0, p1, (0,0,255), 2)
-        cv2.circle(img_, (x,y), 5, (255,0,0), 1)
-    
-    showImg(img_, t= 100000)
-    lv = 3
-    
-    pI_1 = Pyramids(img1, lv)
-    pI_2 = Pyramids(img2, lv)
-    
-    for i in range(lv + 1):
         
