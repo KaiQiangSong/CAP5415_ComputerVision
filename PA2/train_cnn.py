@@ -274,7 +274,7 @@ class ConvNet(object):
             # Remove NotImplementedError and assign calculated value to logits after code implementation.
             W = tf.Variable(tf.zeros([hidden_size, class_num]))
             b = tf.Variable(tf.zeros([class_num]))
-            logits = tf.nn.softmax(tf.matmul(features, W) + b)
+            logits = tf.matmul(features, W) + b
 
             # ======================================================================
             # Define loss function, use the logits.
