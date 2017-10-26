@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import cv2
+import cv2, math
 import numpy as np
 import numpy.linalg as la
 import scipy as sci
@@ -101,12 +101,19 @@ def getTMatrix(f_x, f_y, f_t, mask):
     v = (T_xt * T_xy - T_yt * T_xx) / (T_xx * T_yy - T_xy * T_xy)
     return u,v 
 
-def Pyramids(img, level = 3):
+def Pyramids(img, level = (-2, 2)):
     I = img
-    result = [I]
-    for i in range(level):
+    result = []
+    for i in range(level[0], min(0, level[1])):
+        I = cv2.pyrUp(I)
+        result = [I] + result
+    
+    I = img
+    result.append(I)
+    for i in range(max(0, level[0]),level[1]):
         I = cv2.pyrDown(I)
         result.append(I)
+        
     return result
 
 def OpticalFlow(img1, img2):
@@ -128,8 +135,7 @@ def OpticalFlow(img1, img2):
 def Arrow(ax, line):
     p0 = line[0]
     dp = line[1]
-    print line
-    ax.arrow(p0[0], p0[1], dp[0], dp[1], head_width=0.05, head_length=0.1, fc='k', ec='k')
+    ax.arrow(p0[1], p0[0], dp[0], dp[1], head_width=0.05, head_length=0.1, fc='blue', ec='red')
     return ax
 
 def Question1(prefix):
@@ -143,16 +149,49 @@ def Question1(prefix):
     
     result = OpticalFlow(img1, img2)
     ax = plt.axes()
-    ax.set_xlim([img.shape[0], 0])
-    ax.set_ylim([0, img.shape[1]])
+    ax.set_xlim([0, img.shape[1]])
+    ax.set_ylim([img.shape[0], 0])
+    
+    ax.imshow(img1)
     
     for line in result:
-        Arrow(ax, line)
+        ax = Arrow(ax, line)
+    plt.show()
+
+def scale(line, size):
+    return ((line[0][0] * 2 , line[0][1] * 2),(line[1][0] * 2, line[1][1]* 2 ))
+    
+def Question2(prefix, lv = (-2, 2)):
+    f1Name = prefix+'1.png'
+    f2Name = prefix+'2.png'
+    img1 = cv2.imread(f1Name)
+    img2 = cv2.imread(f2Name)
+    img = img1
+    img1 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
+    img2 = cv2.cvtColor(img2, cv2.COLOR_RGB2GRAY)
+    
+    ax = plt.axes()
+    ax.set_xlim([0, img.shape[1]])
+    ax.set_ylim([img.shape[0], 0])
+    ax.imshow(img1)
+    
+    pI1 = Pyramids(img1, lv)
+    pI2 = Pyramids(img2, lv)
+    
+    print len(pI1)
+    
+    size = 2 ** lv[0]
+    for i in range(lv[0], lv[1]+1):
+        print i
+        result_i = OpticalFlow(pI1[i - lv[0]], pI2[i - lv[0]])
+        for line in result_i:
+            ax = Arrow(ax, scale(line, size))
+            size *= 2
     plt.show()
     
     
 if __name__ == '__main__':
     Question1('basketball')
+    Question2('basketball')
     Question1('grove')
-    
-        
+    Question2('grove')
