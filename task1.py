@@ -200,7 +200,7 @@ def Candy(I, sigma = 1):
 
 if __name__ == '__main__':
     # Input the Image I
-    I = imread('Image3.jpg')
+    I = imread('Image2.jpg')
 
     # Get the Graphs
     IG, Candies = Candy(I, 0.1)

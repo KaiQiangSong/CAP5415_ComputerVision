@@ -83,6 +83,7 @@ if __name__ == '__main__':
     I = imread('susan_input1.png')
     if I.ndim == 3:
         I = I[:,:,0]
+    imshow(I)
     
     Corner = SUSAN_Corner(I, mask)
     imshow(Corner)
@@ -95,6 +96,7 @@ if __name__ == '__main__':
     I = imread('susan_input2.png')
     if I.ndim == 3:
         I = I[:,:,0]
+    imshow(I)
     
     Corner = SUSAN_Corner(I, mask)
     imshow(Corner)
