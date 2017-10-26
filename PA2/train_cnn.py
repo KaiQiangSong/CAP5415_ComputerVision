@@ -30,6 +30,8 @@ class ConvNet(object):
         # Uncomment the following return stmt once method implementation is done.
         # return  fcl
         # Delete line return NotImplementedError() once method is implemented.
+        with tf.name_scope('model_1_fc'):
+            
         return NotImplementedError()
 
     # Use two convolutional layers.
@@ -134,27 +136,31 @@ class ConvNet(object):
             # ----------------- YOUR CODE HERE ----------------------
             #
             # Remove NotImplementedError and assign calculated value to logits after code implementation.
-            logits = NotImplementedError
+            W = tf.Variable(tf.zeros([hidden_size, class_num]))
+            b = tf.Variable(tf.zeros([class_num]))
+            logits = tf.nn.softmax(tf.matmul(features, W) + b)
 
             # ======================================================================
             # Define loss function, use the logits.
             # ----------------- YOUR CODE HERE ----------------------
             #
             # Remove NotImplementedError and assign calculated value to loss after code implementation.
-            loss = NotImplementedError
+            y_ = tf.one_hot(Y, class_num)
+            loss = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(logits, reduction_indices=[1])))
 
             # ======================================================================
             # Define training op, use the loss.
             # ----------------- YOUR CODE HERE ----------------------
             #
             # Remove NotImplementedError and assign calculated value to train_op after code implementation.
-            train_op = NotImplementedError
+            train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)
 
             # ======================================================================
             # Define accuracy op.
             # ----------------- YOUR CODE HERE ----------------------
             #
-            accuracy = NotImplementedError
+            correct_prediction = tf.equal(tf.argmax(logits,1), tf.argmax(y_,1))
+            accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
             # ======================================================================
             # Allocate percentage of GPU memory to the session.
