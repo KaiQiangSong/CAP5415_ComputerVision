@@ -172,7 +172,7 @@ class ConvNet(object):
             h_fc2 = tf.nn.relu(tf.matmul(h_fc1, W_fc2) + b_fc2)
             L2_fc2 = tf.nn.l2_loss(W_fc2)
             
-        return h_fc, decay * (L2_fc1 + L2_fc2)
+        return h_fc2, decay * (L2_fc1 + L2_fc2)
 
     # Use Dropout now.
     def model_5(self, X, hidden_size, is_train):
@@ -298,7 +298,7 @@ class ConvNet(object):
             # ----------------- YOUR CODE HERE ----------------------
             #
             correct_prediction = tf.equal(tf.argmax(logits,1), tf.argmax(y_,1))
-            accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+            accuracy = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
 
             # ======================================================================
             # Allocate percentage of GPU memory to the session.
