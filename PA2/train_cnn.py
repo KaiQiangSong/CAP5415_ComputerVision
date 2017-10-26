@@ -4,6 +4,28 @@ import time
 import tensorflow as tf
 
 ########### Convolutional neural network class ############
+def conv2d(x, W):
+    """conv2d returns a 2d convolution layer with full stride."""
+    return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+
+
+def max_pool_2x2(x):
+    """max_pool_2x2 downsamples a feature map by 2X."""
+    return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
+                          strides=[1, 2, 2, 1], padding='SAME')
+
+
+def weight_variable(shape):
+    """weight_variable generates a weight variable of a given shape."""
+    initial = tf.truncated_normal(shape, stddev=0.1)
+    return tf.Variable(initial)
+
+
+def bias_variable(shape):
+    """bias_variable generates a bias variable of a given shape."""
+    initial = tf.constant(0.1, shape=shape)
+    return tf.Variable(initial)
+
 class ConvNet(object):
     def __init__(self, mode):
         self.mode = mode
@@ -30,9 +52,14 @@ class ConvNet(object):
         # Uncomment the following return stmt once method implementation is done.
         # return  fcl
         # Delete line return NotImplementedError() once method is implemented.
-        with tf.name_scope('model_1_fc'):
+        with tf.name_scope('reshape'):
+            X = tf.reshape(X, [-1, 784])
             
-        return NotImplementedError()
+        with tf.name_scope('fc'):
+            W_fc = weight_variable([784, hidden_size])
+            b_fc = bias_variable([hidden_size])
+        
+        return tf.nn.sigmoid(tf.matmul(X, W_fc) + b_fc)
 
     # Use two convolutional layers.
     def model_2(self, X, hidden_size):
@@ -44,7 +71,30 @@ class ConvNet(object):
         # Uncomment the following return stmt once method implementation is done.
         # return  fcl
         # Delete line return NotImplementedError() once method is implemented.
-        return NotImplementedError()
+        with tf.name_scope('conv1'):
+            W_conv1 = weight_variable([5, 5, 1, 40])
+            b_conv1 = bias_variable([40])
+            h_conv1 = tf.nn.sigmoid(conv2d(X, W_conv1) + b_conv1)
+        
+        with tf.name_scope('pool1'):
+            h_pool1 = max_pool_2x2(h_conv1)
+            
+        with tf.name_scope('conv2'):
+            W_conv2 = weight_variable([5, 5, 40, 40])
+            b_conv2 = bias_variable([40])
+            h_conv2 = tf.nn.sigmoid(conv2d(h_pool1, W_conv2) + b_conv2)  
+                  
+        with tf.name_scope('pool2'):
+            h_pool2 = max_pool_2x2(h_conv2)
+            
+        with tf.name_scope('fc'):
+            W_fc = weight_variable([7 * 7 * 40, hidden_size])
+            b_fc = bias_variable([hidden_size])
+            
+            h_pool2_flat = tf.reshape(h_pool2, [-1, 7 * 7 * 40])
+            h_fc = tf.nn.sigmoid(tf.matmul(h_pool2_flat, W_fc) + b_fc)
+        
+        return h_fc
 
     # Replace sigmoid with ReLU.
     def model_3(self, X, hidden_size):
@@ -56,7 +106,29 @@ class ConvNet(object):
         # Uncomment the following return stmt once method implementation is done.
         # return  fcl
         # Delete line return NotImplementedError() once method is implemented.
-        return NotImplementedError()
+        with tf.name_scope('conv1'):
+            W_conv1 = weight_variable([5, 5, 1, 40])
+            b_conv1 = bias_variable([40])
+            h_conv1 = tf.nn.relu(conv2d(X, W_conv1) + b_conv1)
+        
+        with tf.name_scope('pool1'):
+            h_pool1 = max_pool_2x2(h_conv1)
+            
+        with tf.name_scope('conv2'):
+            W_conv2 = weight_variable([5, 5, 40, 40])
+            b_conv2 = bias_variable([40])
+            h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)  
+                  
+        with tf.name_scope('pool2'):
+            h_pool2 = max_pool_2x2(h_conv2)
+            
+        with tf.name_scope('fc'):
+            W_fc = weight_variable([7 * 7 * 40, hidden_size])
+            b_fc = bias_variable([hidden_size])
+            
+            h_pool2_flat = tf.reshape(h_pool2, [-1, 7 * 7 * 40])
+            h_fc = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc) + b_fc)
+        return h_fc
 
     # Add one extra fully connected layer.
     def model_4(self, X, hidden_size, decay):
@@ -67,8 +139,40 @@ class ConvNet(object):
         #
         # Uncomment the following return stmt once method implementation is done.
         # return  fcl
-        # Delete line return NotImplementedError() once method is implemented.
-        return NotImplementedError()
+        # Delete line return NotImplementedError() once method is implemented.     
+        with tf.name_scope('conv1'):
+            W_conv1 = weight_variable([5, 5, 1, 40])
+            b_conv1 = bias_variable([40])
+            h_conv1 = tf.nn.relu(conv2d(X, W_conv1) + b_conv1)
+        
+        with tf.name_scope('pool1'):
+            h_pool1 = max_pool_2x2(h_conv1)
+            
+        with tf.name_scope('conv2'):
+            W_conv2 = weight_variable([5, 5, 40, 40])
+            b_conv2 = bias_variable([40])
+            h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)  
+                  
+        with tf.name_scope('pool2'):
+            h_pool2 = max_pool_2x2(h_conv2)
+            
+        with tf.name_scope('fc1'):
+            W_fc1 = weight_variable([7 * 7 * 40, hidden_size])
+            b_fc1 = bias_variable([hidden_size])
+            
+            h_pool2_flat = tf.reshape(h_pool2, [-1, 7 * 7 * 40])
+            h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+            
+            L2_fc1 = tf.nn.l2_loss(W_fc1)
+        
+        with tf.name_scope('fc2'):
+            W_fc2 = weight_variable([hidden_size, hidden_size])
+            b_fc2 = bias_variable([hidden_size])
+            
+            h_fc2 = tf.nn.relu(tf.matmul(h_fc1, W_fc2) + b_fc2)
+            L2_fc2 = tf.nn.l2_loss(W_fc2)
+            
+        return h_fc, decay * (L2_fc1 + L2_fc2)
 
     # Use Dropout now.
     def model_5(self, X, hidden_size, is_train):
@@ -82,7 +186,39 @@ class ConvNet(object):
         # Uncomment the following return stmt once method implementation is done.
         # return  fcl
         # Delete line return NotImplementedError() once method is implemented.
-        return NotImplementedError()
+        with tf.name_scope('conv1'):
+            W_conv1 = weight_variable([5, 5, 1, 40])
+            b_conv1 = bias_variable([40])
+            h_conv1 = tf.nn.relu(conv2d(X, W_conv1) + b_conv1)
+        
+        with tf.name_scope('pool1'):
+            h_pool1 = max_pool_2x2(h_conv1)
+            
+        with tf.name_scope('conv2'):
+            W_conv2 = weight_variable([5, 5, 40, 40])
+            b_conv2 = bias_variable([40])
+            h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)  
+                  
+        with tf.name_scope('pool2'):
+            h_pool2 = max_pool_2x2(h_conv2)
+            
+        with tf.name_scope('fc1'):
+            W_fc1 = weight_variable([7 * 7 * 40, hidden_size])
+            b_fc1 = bias_variable([hidden_size])
+            
+            h_pool2_flat = tf.reshape(h_pool2, [-1, 7 * 7 * 40])
+            h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+            
+            
+        with tf.name('dropout'):
+            h_fc1_drop = tf.nn.dropout(h_fc1, 0.5)
+        
+        with tf.name_scope('fc2'):
+            W_fc2 = weight_variable([hidden_size, hidden_size])
+            b_fc2 = bias_variable([hidden_size])
+            
+            h_fc2 = tf.nn.relu(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
+        return h_fc2
 
     # Entry point for training and evaluation.
     def train_and_evaluate(self, FLAGS, train_set, test_set):
@@ -125,7 +261,7 @@ class ConvNet(object):
 
             # model 4: add one extral fully connected layer
             elif self.mode == 4:
-                features = self.model_4(X, hidden_size, decay)
+                features, L2 = self.model_4(X, hidden_size, decay)
 
             # model 5: utilize dropout
             elif self.mode == 5:
@@ -146,7 +282,9 @@ class ConvNet(object):
             #
             # Remove NotImplementedError and assign calculated value to loss after code implementation.
             y_ = tf.one_hot(Y, class_num)
-            loss = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(logits, reduction_indices=[1])))
+            if self.mode != 4:
+                L2 = 0
+            loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits = logits, labels = y_)) + L2
 
             # ======================================================================
             # Define training op, use the loss.
