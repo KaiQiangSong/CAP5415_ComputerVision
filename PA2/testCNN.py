@@ -37,7 +37,7 @@ parser.add_argument('--num_epochs',
                     help='Number of epochs to run trainer.')
 parser.add_argument('--decay',
                     type=float,
-                    default=0.1,
+                    default=0.0001,
                     help='Decay rate of l2 regularization.')
 parser.add_argument('--batch_size',
                     type=int, default=10,

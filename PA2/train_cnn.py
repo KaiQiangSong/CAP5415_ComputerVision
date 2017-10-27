@@ -210,7 +210,7 @@ class ConvNet(object):
             h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
             
             
-        with tf.name('dropout'):
+        with tf.name_scope('dropout'):
             h_fc1_drop = tf.nn.dropout(h_fc1, 0.5)
         
         with tf.name_scope('fc2'):
@@ -225,6 +225,7 @@ class ConvNet(object):
         class_num = 10
         num_epochs = FLAGS.num_epochs
         batch_size = FLAGS.batch_size
+        print batch_size
         learning_rate = FLAGS.learning_rate
         hidden_size = FLAGS.hiddenSize
         decay = FLAGS.decay
@@ -327,12 +328,26 @@ class ConvNet(object):
                         s = e
                     end_time = time.time()
                     print ('the training took: %d(s)' % (end_time - start_time))
-
-                    total_correct = sess.run(accuracy, feed_dict={X: testX, Y: testY, is_train: False})
+                    
+                    total_correct = 0
+                    s = 0
+                    while s < test_size:
+                        e = min(s + batch_size, test_size)
+                        batch_x = testX[s: e]
+                        batch_y = testY[s: e]
+                        total_correct += sess.run(accuracy, feed_dict={X: batch_x, Y: batch_y, is_train: False})
+                        s = e
                     print ('accuracy of the trained model %f' % (total_correct / testX.shape[0]))
                     print ()
-
-                return sess.run(accuracy, feed_dict={X: testX, Y: testY, is_train: False}) / testX.shape[0]
+                total_correct = 0
+                s = 0
+                while s < test_size:
+                    e = min(s + batch_size, test_size)
+                    batch_x = testX[s: e]
+                    batch_y = testY[s: e]
+                    total_correct += sess.run(accuracy, feed_dict={X: batch_x, Y: batch_y, is_train: False})
+                    s = e
+                return total_correct / testX.shape[0]
 
 
 
