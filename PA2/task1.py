@@ -120,7 +120,10 @@ def OpticalFlow(img1, img2):
     f_x, f_y = derivative(img1)
     f_t = img1 - img2
     filter = buildMask(3)
+    #Calculate T Matrix and get the speed
     u, v = getTMatrix(f_x, f_y, f_t, filter)
+    
+    # Get the Corners (Feature Points)
     Corners = cv2.goodFeaturesToTrack(img1, 100, 0.3, 7, blockSize = 7)
     Corners = np.reshape(Corners, (Corners.shape[0], Corners.shape[2])).astype(int)
     
@@ -133,6 +136,9 @@ def OpticalFlow(img1, img2):
     return result
 
 def Arrow(ax, line):
+    '''
+    Draw an Arrow in Matplotlib
+    '''
     p0 = line[0]
     dp = line[1]
     ax.arrow(p0[1], p0[0], dp[0], dp[1], head_width=0.05, head_length=0.1, fc='blue', ec='red')
@@ -175,14 +181,13 @@ def Question2(prefix, lv = (-2, 2)):
     ax.set_ylim([img.shape[0], 0])
     ax.imshow(img1)
     
+    #Do Pyramids
     pI1 = Pyramids(img1, lv)
     pI2 = Pyramids(img2, lv)
     
-    print len(pI1)
     
     size = 2 ** lv[0]
     for i in range(lv[0], lv[1]+1):
-        print i
         result_i = OpticalFlow(pI1[i - lv[0]], pI2[i - lv[0]])
         for line in result_i:
             ax = Arrow(ax, scale(line, size))

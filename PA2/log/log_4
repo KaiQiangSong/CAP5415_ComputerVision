@@ -1,0 +1,262 @@
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcublas.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcudnn.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcufft.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcuda.so.1 locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcurand.so locally
+Extracting ../mnist/data/train-images-idx3-ubyte.gz
+Extracting ../mnist/data/train-labels-idx1-ubyte.gz
+Extracting ../mnist/data/t10k-images-idx3-ubyte.gz
+Extracting ../mnist/data/t10k-labels-idx1-ubyte.gz
+I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:937] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:885] Found device 0 with properties: 
+name: GeForce GTX 1080
+major: 6 minor: 1 memoryClockRate (GHz) 1.7335
+pciBusID 0000:01:00.0
+Total memory: 7.92GiB
+Free memory: 7.43GiB
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:906] DMA: 0 
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:916] 0:   Y 
+I tensorflow/core/common_runtime/gpu/gpu_device.cc:975] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX 1080, pci bus id: 0000:01:00.0)
+('********************', 'epoch', 1, '********************')
+the training took: 7(s)WWWWWWWWW
+accuracy of the trained model 0.978600
+()
+('********************', 'epoch', 2, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.982900
+()
+('********************', 'epoch', 3, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.988400
+()
+('********************', 'epoch', 4, '********************')
+the training took: 11(s)
+accuracy of the trained model 0.988900
+()
+('********************', 'epoch', 5, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.985700
+()
+('********************', 'epoch', 6, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.984900
+()
+('********************', 'epoch', 7, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.990400
+()
+('********************', 'epoch', 8, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.986900
+()
+('********************', 'epoch', 9, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.989500
+()
+('********************', 'epoch', 10, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.989800
+()
+('********************', 'epoch', 11, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.990000
+()
+('********************', 'epoch', 12, '********************')
+the training took: 15(s)
+accuracy of the trained model 0.990700
+()
+('********************', 'epoch', 13, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.988300
+()
+('********************', 'epoch', 14, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.988100
+()
+('********************', 'epoch', 15, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.990700
+()
+('********************', 'epoch', 16, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.990800
+()
+('********************', 'epoch', 17, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.986700
+()
+('********************', 'epoch', 18, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.990800
+()
+('********************', 'epoch', 19, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.991600
+()
+('********************', 'epoch', 20, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.992600
+()
+('********************', 'epoch', 21, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.992800
+()
+('********************', 'epoch', 22, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993100
+()
+('********************', 'epoch', 23, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.992900
+()
+('********************', 'epoch', 24, '********************')
+the training took: 9(s)
+accuracy of the trained model 0.993200
+()
+('********************', 'epoch', 25, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993300
+()
+('********************', 'epoch', 26, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 27, '********************')
+the training took: 13(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 28, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993400
+()
+('********************', 'epoch', 29, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 30, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993700
+()
+('********************', 'epoch', 31, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993800
+()
+('********************', 'epoch', 32, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993800
+()
+('********************', 'epoch', 33, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993900
+()
+('********************', 'epoch', 34, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993700
+()
+('********************', 'epoch', 35, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 36, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 37, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 38, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 39, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 40, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 41, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 42, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 43, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 44, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 45, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 46, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 47, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 48, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 49, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993700
+()
+('********************', 'epoch', 50, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993700
+()
+('********************', 'epoch', 51, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 52, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 53, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993500
+()
+('********************', 'epoch', 54, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993600
+()
+('********************', 'epoch', 55, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993400
+()
+('********************', 'epoch', 56, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993300
+()
+('********************', 'epoch', 57, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993200
+()
+('********************', 'epoch', 58, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993300
+()
+('********************', 'epoch', 59, '********************')
+the training took: 7(s)
+accuracy of the trained model 0.993200
+()
+('********************', 'epoch', 60, '********************')
+the training took: 9(s)
+accuracy of the trained model 0.993300
+()
+********************model 4********************
+accuracy is 0.993300
+
