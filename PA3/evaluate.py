@@ -18,6 +18,8 @@ actions = ['Diving','Golf-Swing','Kicking','Lifting','Riding-Horse','Run','Skate
 if __name__ == '__main__':
     i2l = loadFromPKL('i2l.pkl')
     count = loadFromPKL('count.pkl')
+    print i2l
+    print count
     
     N = len(i2l)
     M = len(actions)
@@ -38,3 +40,10 @@ if __name__ == '__main__':
     correct = np.sum(np.diag(count_new))
     all = np.sum(count_new)
     print correct * 1.0 / all
+    
+    precision = np.diag(count_new) * 1.0 / np.sum(count_new, axis = 0)
+    recall = np.diag(count_new) * 1.0 / np.sum(count_new, axis = 1)
+    
+    print precision
+    print recall
+    print 2 * (precision * recall) / (precision + recall)

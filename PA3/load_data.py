@@ -27,7 +27,6 @@ def extracFeature(fileName, model):
     
     features = model.predict(x)
     return features
-    
 
 if __name__ == '__main__':
     path = './ucf_action'

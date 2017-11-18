@@ -38,13 +38,14 @@ if __name__ == '__main__':
     
     st = 0
     for testVideo in dataset:
-        ed = st + len(data[2])
+        ed = st + len(testVideo[2])
         trainX = np.concatenate([features[:st], features[ed:]], axis = 0)
         trainY = np.concatenate([Labels[:st], Labels[ed:]], axis = 0)
         testX = features[st:ed]
         testY = Labels[st:ed]
         print trainX.shape, trainY.shape
         print testX.shape, testY.shape
+        print st, ed
         st = ed
         
         clf = svm.SVC(kernel = 'linear', decision_function_shape='ovo')
