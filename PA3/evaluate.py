@@ -13,7 +13,7 @@ def loadFromPKL(filename):
         data = Pickle.load(f)
     return data
 
-actions = ['Diving','Golf-Swing','Kicking','Lifting','Riding-Horse','Run','SkateBoarding','Swing','Walk']
+actions = ['Diving','Golf-Swing','Kicking','Lifting','Riding-Horse','Run','SkateBoarding','Swing-Bench','Swing-SideAngle','Walk']
 
 if __name__ == '__main__':
     i2l = loadFromPKL('i2l.pkl')
